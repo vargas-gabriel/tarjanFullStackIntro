@@ -16,6 +16,8 @@ end 1st lecture segment
 - 1st make GET route work (1st server side db query)
 
 
+end 2nd lecture segment
+---
 
 - get user input working
 - write POST query on server
