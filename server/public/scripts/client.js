@@ -2,13 +2,15 @@ $( document ).ready( onReady );
 
 function onReady(){
     getSongs();
-    // TESTING ADD SONG //
-    addSong();
+    $( '#addSongButton' ).on( 'click', addSong );
 } // end onReady
 
 function addSong(){
     let objectToSend = {
-        test: 'testData'
+        rank: $( '#rankIn' ).val(),
+        artist: $( '#artistIn' ).val(),
+        track: $( '#trackIn' ).val(),
+        published: $( '#publishedIn' ).val()
     } // end object to send
     $.ajax({
         method: 'POST',
@@ -27,7 +29,18 @@ function getSongs(){
         method: 'GET',
         url: '/songs'
     }).then( function( response ){
-        console.log( 'back from GET with:', response );
+        console.log( 'back from GET with:', response ); 
+        // display songs on DOM 
+        let el = $( '#songsOut' );
+        el.empty();
+        for( let i=0; i<response.length; i++ ){
+            el.append( `<li>
+            ${ response[i].rank }
+            ${ response[i].track }
+            ${ response[i].artist }
+            ${ response[i].published.split( 'T' )[0] }
+            </li>`)
+        } // end for
     }).catch( function( err ){
         alert( 'error!' );
         console.log( err );
