@@ -18,6 +18,7 @@ function addSong(){
         data: objectToSend
     }).then( function( response ){
         console.log( 'back from POST with:', response );
+        getSongs();
     }).catch( function( err ){
         alert( 'error!' );
         console.log( err );
