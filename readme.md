@@ -2,8 +2,11 @@ Tarjan Full Stack Intro!
 ===
 
 - npm init & git init usuals
+- add .gitigore
 - `npm install express pg`: "pg" is the package that will allow us to run SQL queries 
 - set up our folders (Server, public, etc)
+- move a copy of JQuery into "server/public/vendors"
+- setup github repo and do 1st push
 
 - build out our interface for adding a song and viewing songs
 - get handshakes working for GET and POST routes
