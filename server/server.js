@@ -31,7 +31,7 @@ app.get( '/songs', ( req, res )=>{
     console.log( 'in /songs GET' );
     // test query: top 40 songs by rank
     // SELECT * FROM "songs" ORDER BY "rank" DESC LIMIT 40;
-    const queryString = 'SELECT * FROM "songs" ORDER BY "rank" DESC LIMIT 40;';
+    const queryString = 'SELECT * FROM "songs" ORDER BY "rank" ASC LIMIT 40;';
     pool.query( queryString ).then( ( results )=>{
         res.send( results.rows ); //runs if query was successful
     }).catch( ( err )=>{
@@ -43,6 +43,12 @@ app.get( '/songs', ( req, res )=>{
 app.post( '/songs', ( req, res )=>{
     console.log( 'in /songs POST:', req.body );
     // create query string
+    const queryString = `INSERT INTO "songs" (rank, artist, track, published) VALUES ( $1, $2, $3, $4 )`;
     // ask pool to run our Query String
-    res.send( 'chirp' );
+    pool.query( queryString, [ req.body.rank, req.body.artist, req.body.track, req.body.published ] ).then( ( results )=>{
+        res.sendStatus( 201 ); // success, created
+    }).catch( ( err ) =>{
+        console.log( err );
+        res.sendStatus( 500 );
+    }) // end query
 }) // end /songs POST
