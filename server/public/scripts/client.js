@@ -4,15 +4,14 @@ function onReady(){
     getSongs();
     $( '#addSongButton' ).on( 'click', addSong );
     $( document ).on( 'click', '.deleteSongBtn', deleteSong );
-    $( document ).on( 'click', '.rankUPBtn', rankUp );
-    $( document ).on( 'click', '.rankDownBtn', rankDown );
+    $( document ).on( 'click', '.rankUp', rankUp );
+    $( document ).on( 'click', '.rankDown', rankDown );
 } // end onReady
 
-
 function rankUp(){
-    console.log('in rankUp');
-    let songId = $(this).data('id');
-    console.log(songId);
+    let songId = $(this).data('id');  
+
+    console.log('up', songId);
     $.ajax({
         method: 'PUT',
         url: `/songs/${songId}`,
@@ -20,17 +19,17 @@ function rankUp(){
             direction: 'up'
         }
     }).then(function(response){
-        console.log('response from rankup',response);
+        console.log('response from rankUP', response);
+        getSongs();
     }).catch( function(err){
         console.log("Error in delete", err);
         alert("ruh-roh");
     });
-
 }
+
 function rankDown(){
-    let songId = $(this).data('id');
-    console.log('in rankDown', songId);
-    
+    let songId = $(this).data('id');  
+    console.log('down', songId);
 }
 
 function deleteSong(){
@@ -91,8 +90,8 @@ function getSongs(){
             ${ response[i].artist }
             ${ response[i].published.split( 'T' )[0] }
             <button class="deleteSongBtn" data-id="${response[i].id}">Delete Me</button>
-            <button class="rankUPBtn" data-id="${response[i].id}">Up</button>
-            <button class="rankDownBtn" data-id="${response[i].id}">Down</button>
+            <button class="rankUp" data-id="${response[i].id}">Up</button>
+            <button class="rankDown" data-id="${response[i].id}">Down</button>
             </li>`)
         } // end for
     }).catch( function( err ){
