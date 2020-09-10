@@ -12,7 +12,7 @@ app.use( bodyParser.urlencoded( { extended: true } ) );
 const port = 3000;
 
 // db setup
-const Pool = pg.Pool;
+const Pool = pg.Pool;     // pg.Pool is NOT tacos
 // configure the connection to db
 const pool = new Pool({
     database: "music_library", // db name (NOT table name)
@@ -40,6 +40,25 @@ app.get( '/songs', ( req, res )=>{
     }) // end query
 }) // end /songs GET
 
+// Get a single song
+// Endpoint: GET /songs/:id
+app.get( '/songs/:id', ( req, res ) => {
+    console.log("song ID to retrieve", req.params.id);
+
+    // Grab song ID from URL params
+    let songId = req.params.id;
+
+    const queryString = `SELECT * FROM "songs" WHERE "id" = $1;`
+    pool.query(queryString, [songId])
+        .then((results) => {
+            res.send(results.rows)
+        })
+        .catch((err) => {
+            console.error("ERROR!!!", err);
+            res.sendStatus(500);
+        });
+} )
+
 app.post( '/songs', ( req, res )=>{
     console.log( 'in /songs POST:', req.body );
     // create query string
@@ -52,3 +71,29 @@ app.post( '/songs', ( req, res )=>{
         res.sendStatus( 500 );
     }) // end query
 }) // end /songs POST
+
+app.delete( '/songs/:id', ( req, res ) => {
+    console.log('req.params', req.params);
+
+    const queryString = `DELETE FROM "songs" WHERE "id" = $1;`
+
+    // Grab the :id param from the URL
+    let songId = req.params.id;     // 5
+    console.log("Gonna delete song with id=", songId);
+
+    // Execute DB query
+    pool.query(queryString, [songId])
+        .then((response) => {
+            console.log("Deleted!");
+            res.sendStatus(200);
+        })
+        .catch((err) => {
+            console.log("Error deleted record", err);
+            res.sendStatus(500);
+        })
+});
+
+app.put( '/songs/:id', ( req, res ) => {
+    console.log('params', req.params.id, req.body);
+    res.sendStatus(200);
+});
